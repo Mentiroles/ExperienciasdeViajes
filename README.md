@@ -1,40 +1,62 @@
+### Experiencias de viajes
 
 ## Entidades
 
-- user:
-  - id
-  - profile picture
-  -name
-  - email
-  - password
-  - created_at
-  - type
+users:
 
+- id
+- photo
+- nickName
+- email
+- password
+- created_at
 
+locations:
 
-- recomendaciones:
-  - id
-  - title
-  - category
-  - place
-  - lean-in
-  - user
-  - text
-  - image (opcional)
-  - likes
-  - created_at
+- id
+- country
 
+recomendaciones:
+
+- id
+- title
+- category
+- locationId
+- lean_in
+- userId
+- description
+- created_at
+
+recommendationPhotos:
+
+- id
+- recommendationId
+- URL
+
+comentarios:
+
+- id
+- message
+- recommendationId
+- userId
+
+recommendationsLikes:
+
+- id
+- recommendationId
+- userId
 
 ## Endpoints
 
- POST Registrarse de forma anonima o publica(CONTROLADORES, quizas varios)
- GET login
- PATCH gestion de perfil(añadir foto)
-POST  crear recomendaciones(usuarios publicos)
-PUT votarlas(usiarios publicos)
-PATCH editar experiencia propia (por id(usarios publicos)
- DELETE borrar experiencia propia (por id(usarios publicos)
- GET mostrarlas todas las recomendaciones
- GET buscar por categoria o lugar
- GET mostrar la experiencia en detalle
- GET ordenas las recomendaciones por likes
+- POST Registrarse ✔️
+- POST Loggearse ✔️
+- POST gestion de perfil(añadir foto) ✔️
+- PATCH editar perfil ✔️
+- POST crear recomendaciones(usuarios publicos) ✔️
+- PUT Likes y dislikes (usuarios publicos) ✔️
+- PATCH editar experiencia propia por id(usarios publicos) ✔️
+- DELETE borrar experiencia propia por id(usarios publicos) ✔️
+- GET mostrarlas todas las recomendaciones ✔️
+- GET buscar por categoria o lugar ✔️
+- GET mostrar la experiencia en detalle ✔️
+- GET ordenas las recomendaciones por likes ✔️

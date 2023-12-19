@@ -1,43 +1,43 @@
 import "dotenv/config";
 import express from "express";
-import morgan from "morgan";
+import authenticationRoutes from "../ExperienciasdeViajespara chopear/src/routes/authentication.js";
+import recommendationsRoutes from "../ExperienciasdeViajespara chopear/src/routes/recommendations.js";
+import commentsRoutes from "../ExperienciasdeViajespara chopear/src/routes/comments.js";
+import { PORT, PUBLIC_DIR, SERVER_HOST } from "./constants.js";
+import { throwNotFoundError } from "../ExperienciasdeViajespara chopear/src/utils/errors.js";
 
 const app = express();
 
-app.use (morgan("dev"));
+const staticFileHandler = express.static(PUBLIC_DIR);
+app.use(staticFileHandler);
 
-//Rutas de usuario
-// app.post('/user', newUserController);
-// app.get('/user/:id', getUserController);
-// app.post('/login', loginController);
-// app.patch('/user/:id/profile_pic', authUser, updateProfilePicController);
+const jsonParser = express.json();
+app.use(jsonParser);
 
-// //Rutas de recomendaciones
-// app.post('/', authUser, newRecommendationController);
-// app.get('/', getRecommendationsController);
-// app.get('/tweet/:id', getSingleRecommendationController);
-// app.delete('/tweet/:id', authUser, deleteRecommendationController);
+app.use(authenticationRoutes);
+app.use(recommendationsRoutes);
+app.use(commentsRoutes);
 
-// Middleware de 404
+app.use("*", (req, res) => {
+  throwNotFoundError();
+});
+
 app.use((req, res) => {
-    res.status(404).send({
-      status: 'error',
-      message: 'Not found',
-    });
+  res.status(404).send({
+    status: "error",
+    message: "Not found",
   });
-  
-  // Middleware de gestión de errores
-  app.use((error, req, res, next) => {
-    console.error(error);
-  
-    res.status(error.httpStatus || 500).send({
-      status: 'error',
-      message: error.message,
-    });
+});
+
+app.use((error, req, res, next) => {
+  console.error(error);
+
+  res.status(error.httpStatus || 500).send({
+    status: "error",
+    message: error.message,
   });
-  
-  // Lanzamos el servidor
-  app.listen(3000, () => {
-    console.log('Servidor funcionando! 👻');
-  });
-  
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor funcionando en:`, SERVER_HOST, `🤘!`);
+});
