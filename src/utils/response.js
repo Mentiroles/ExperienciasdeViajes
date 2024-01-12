@@ -11,3 +11,11 @@ export function sendOK(res, data = {}) {
     ...data,
   });
 }
+
+export function sendError(res, message, status) {
+  res.status(status).json({
+    error: {
+      message: message,
+    },
+  });
+}

@@ -17,6 +17,11 @@ import { sendOKCreated } from "../utils/response.js";
 import bcrypt from "bcrypt";
 import { authMiddleware } from "../middlewares/auth.js";
 import { loggedInGuard } from "../middlewares/logged-in-guard.js";
+import { sendError } from "../utils/response.js";
+import {
+  throwInvalidFileTypeError,
+  throwPasswordMatchError,
+} from "../utils/errors.js";
 
 const router = express.Router();
 
@@ -46,20 +51,24 @@ router.post(
   wrapWithCatch(async (req, res) => {
     const { user } = await validateUserLoginPayload(req.body);
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        nickName: user.nickName,
-      },
-      process.env.SECRET,
-      {
-        expiresIn: "7d",
-      }
-    );
+    if (user) {
+      const token = jwt.sign(
+        {
+          id: user.id,
+          nickName: user.nickName,
+        },
+        process.env.SECRET,
+        {
+          expiresIn: "7d",
+        }
+      );
 
-    sendOK(res, {
-      token,
-    });
+      sendOK(res, {
+        token,
+      });
+    } else {
+      sendError(res, "User does not exist", 404);
+    }
   })
 );
 
@@ -77,23 +86,47 @@ router.post(
       recommendationId: req.params.recommendationId,
     });
 
-    const id = req.currentUser.id;
-
-    await fs.mkdir(PHOTOS_DIR, { recursive: true });
+    const allowedFileTypes = [".jpg", ".jpeg", ".png"];
 
     const fileExtension = path.extname(photo.name);
+
+    if (!allowedFileTypes.includes(fileExtension.toLowerCase())) {
+      throwInvalidFileTypeError();
+    }
+
+    const id = req.currentUser.id;
+
+    const userPhotoDir = path.join(PHOTOS_DIR, id.toString());
+    await fs.mkdir(userPhotoDir, { recursive: true });
+
+    const [rows] = await db.execute(
+      "SELECT photo FROM users WHERE id = ? LIMIT 1",
+      [id]
+    );
+    const currentPhoto = rows[0]?.photo;
+
+    if (currentPhoto) {
+      const currentPhotoPath = path.join(userPhotoDir);
+
+      console.log(currentPhotoPath);
+
+      try {
+        await fs.unlink(currentPhotoPath, "/");
+        console.log("Old photo deleted successfully");
+      } catch (error) {
+        console.error(`Error deleting old photo: ${error}`);
+      }
+    }
+
     const randomFileName = crypto.randomUUID();
     const newFilePath = `${randomFileName}${fileExtension}`;
-    await photo.mv(path.join(PHOTOS_DIR, newFilePath));
+    await photo.mv(path.join(userPhotoDir, newFilePath));
 
-    const URL = `photos/${newFilePath}`;
+    const URL = `photos/${id}/${newFilePath}`;
 
-    const [{ updatePhoto }] = await db.execute(
-      `UPDATE users SET photo = ? WHERE id = ?`,
-      [URL, id]
-    );
+    await db.execute("UPDATE users SET photo = ? WHERE id = ?", [URL, id]);
 
-    sendOKCreated(res, updatePhoto);
+    sendOKCreated(res, "Photo added successfully");
   })
 );
 
@@ -105,7 +138,20 @@ router.patch(
   loggedInGuard,
   wrapWithCatch(async (req, res) => {
     const id = req.params.id;
-    const { nickname, email, password, photo } = req.body;
+    const { nickname, email, currentPassword, newPassword } = req.body;
+
+    const [[user]] = await db.execute(
+      `SELECT password FROM users WHERE id = ?`,
+      [id]
+    );
+
+    const password = user.password;
+
+    const passwordMatch = await bcrypt.compare(currentPassword, password);
+
+    if (!passwordMatch) {
+      throwPasswordMatchError();
+    }
 
     if (nickname) {
       await db.execute(`UPDATE users SET nickname = ? WHERE id = ?`, [
@@ -118,15 +164,15 @@ router.patch(
       await db.execute(`UPDATE users SET email = ? WHERE id = ?`, [email, id]);
     }
 
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, 12);
+    if (newPassword) {
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
       await db.execute(`UPDATE users SET password = ? WHERE id = ?`, [
         hashedPassword,
         id,
       ]);
     }
 
-    sendOK(res, { message: "User updated successfully" });
+    sendOK(res, { message: "User updated successfully!" });
   })
 );
 

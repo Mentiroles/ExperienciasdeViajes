@@ -6,6 +6,7 @@ import {
   throwNicknameInUseError,
   throwPhotoIsRequired,
   throwEmailInUseError,
+  throwInvalidPasswordError,
 } from "../utils/errors.js";
 import bcrypt from "bcrypt";
 import joi from "joi";
@@ -71,6 +72,7 @@ export async function validateRegisterPayload({ email, password, nickName }) {
 }
 
 //! VALIDACION LOGIN
+
 export async function validateUserLoginPayload({ email, password }) {
   email = email.trim();
   password = password.trim();
@@ -86,6 +88,16 @@ export async function validateUserLoginPayload({ email, password }) {
   const [[user]] = await db.execute(`SELECT * FROM users WHERE email = ?`, [
     email,
   ]);
+
+  if (!user) {
+    throwUserNotFoundError();
+  }
+
+  const passwordMatch = await bcrypt.compare(password, user.password);
+
+  if (!passwordMatch) {
+    throwInvalidPasswordError();
+  }
 
   return {
     user,

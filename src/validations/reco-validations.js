@@ -8,8 +8,8 @@ import {
   throwNotFoundError,
   throwUnauthorizedError,
   throwInvalidLocationError,
-} from "../../../../ExperienciasdeViajes/src/utils/errors.js";
-import { db } from "../../../../ExperienciasdeViajes/src/database/db-connection.js";
+} from "../utils/errors.js";
+import { db } from "../database/db-connection.js";
 import joi from "joi";
 
 export async function validateCreateRecommendationPayload(payload) {

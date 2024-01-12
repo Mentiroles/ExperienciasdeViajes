@@ -3,18 +3,12 @@ import express from "express";
 import fs from "fs/promises";
 import path from "path";
 import fileUpload from "express-fileupload";
-import { loggedInGuard } from "../../../../ExperienciasdeViajes/src/middlewares/logged-in-guard.js";
-import { authMiddleware } from "../../../../ExperienciasdeViajes/src/middlewares/auth.js";
-import {
-  PHOTOS_DIR,
-  SERVER_HOST,
-} from "../../../../ExperienciasdeViajes/constants.js";
+import { loggedInGuard } from "../middlewares/logged-in-guard.js";
+import { authMiddleware } from "../middlewares/auth.js";
+import { PHOTOS_DIR, SERVER_HOST } from "../../constants.js";
 import { wrapWithCatch } from "../utils/wrap-with-catch.js";
-import {
-  sendOK,
-  sendOKCreated,
-} from "../../../../ExperienciasdeViajes/src/utils/response.js";
-import { db } from "../../../../ExperienciasdeViajes/src/database/db-connection.js";
+import { sendOK, sendOKCreated } from "../utils/response.js";
+import { db } from "../database/db-connection.js";
 import {
   validateCreateRecommendationPayload,
   validateAddImagePayload,
