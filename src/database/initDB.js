@@ -1,5 +1,5 @@
 import "dotenv/config.js";
-import connectDB from "../../src/database/db.js";
+import connectDB from "./db.js";
 
 const db = connectDB();
 

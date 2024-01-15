@@ -1,10 +1,10 @@
 import "dotenv/config";
 import express from "express";
-import authenticationRoutes from "../ExperienciasdeViajespara chopear/src/routes/authentication.js";
-import recommendationsRoutes from "../ExperienciasdeViajespara chopear/src/routes/recommendations.js";
-import commentsRoutes from "../ExperienciasdeViajespara chopear/src/routes/comments.js";
+import authenticationRoutes from "./src/routes/authentication.js";
+import recommendationsRoutes from "./src/routes/recommendations.js";
+import commentsRoutes from "./src/routes/comments.js";
 import { PORT, PUBLIC_DIR, SERVER_HOST } from "./constants.js";
-import { throwNotFoundError } from "../ExperienciasdeViajespara chopear/src/utils/errors.js";
+import { throwNotFoundError } from "./src/utils/errors.js";
 
 const app = express();
 
