@@ -91,7 +91,7 @@ No se pueden borrar comentarios.
 
 Estaría bien que el readme incluyese una descripción del proyecto e instrucciones para arrancarlo.
 
-Cuando un usuario "cambia" su foto (sube otra), no se elimina la anterior, generando basura.
+Cuando un usuario "cambia" su foto (sube otra), no se elimina la anterior, generando basura. ✔️
 
 Para evitar problemas, el endpoint de crear recomendación debería recibir directamente el id del lugar, no el nombre. Lo mismo la query de la búsqueda.
 

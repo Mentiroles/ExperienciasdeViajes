@@ -7,6 +7,7 @@ import {
   throwPhotoIsRequired,
   throwEmailInUseError,
   throwInvalidPasswordError,
+  throwUserNotFoundError,
 } from "../utils/errors.js";
 import bcrypt from "bcrypt";
 import joi from "joi";

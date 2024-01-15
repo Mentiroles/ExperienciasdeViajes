@@ -1,7 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import { wrapWithCatch } from "../utils/wrap-with-catch.js";
-import { sendOK } from "../utils/response.js";
 import { db } from "../database/db-connection.js";
 import {
   validateUserLoginPayload,
@@ -13,7 +12,7 @@ import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 import { PHOTOS_DIR, SERVER_HOST } from "../../constants.js";
-import { sendOKCreated } from "../utils/response.js";
+import { sendOKCreated, sendOK } from "../utils/response.js";
 import bcrypt from "bcrypt";
 import { authMiddleware } from "../middlewares/auth.js";
 import { loggedInGuard } from "../middlewares/logged-in-guard.js";
@@ -105,16 +104,18 @@ router.post(
     );
     const currentPhoto = rows[0]?.photo;
 
+    console.log(currentPhoto);
+
     if (currentPhoto) {
-      const currentPhotoPath = path.join(userPhotoDir);
+      const currentPhotoPath = path.join(PHOTOS_DIR, currentPhoto);
 
       console.log(currentPhotoPath);
 
       try {
         await fs.unlink(currentPhotoPath, "/");
-        console.log("Old photo deleted successfully");
+        console.log("Se borro la foto anterior");
       } catch (error) {
-        console.error(`Error deleting old photo: ${error}`);
+        console.error(`No se puedo borrar la foto por que: ${error}`);
       }
     }
 
@@ -122,11 +123,11 @@ router.post(
     const newFilePath = `${randomFileName}${fileExtension}`;
     await photo.mv(path.join(userPhotoDir, newFilePath));
 
-    const URL = `photos/${id}/${newFilePath}`;
+    const URL = `${id}/${newFilePath}`;
 
     await db.execute("UPDATE users SET photo = ? WHERE id = ?", [URL, id]);
 
-    sendOKCreated(res, "Photo added successfully");
+    sendOKCreated(res, "Photo added successfully!");
   })
 );
 

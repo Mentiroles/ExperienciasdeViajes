@@ -14,11 +14,27 @@ export function throwNicknameInUseError() {
   };
 }
 
+export function throwCommentNotFoundError() {
+  throw {
+    httpStatus: 400,
+    error: "COMMENT_NOT_FOUND",
+    message: "Comment not found",
+  };
+}
+
 export function throwMessageIsRequiredError() {
   throw {
     httpStatus: 400,
     error: "MESSAGE_IS_REQUIRED",
     message: "Message is required",
+  };
+}
+
+export function throwUserNotFoundError() {
+  throw {
+    httpStatus: 400,
+    error: "USER_NOT_FOUND",
+    message: "User not found",
   };
 }
 
