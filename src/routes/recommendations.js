@@ -15,6 +15,10 @@ import {
   validateEditRecommendationPayload,
   validateDeleteRecommendationPayload,
 } from "../validations/reco-validations.js";
+import {
+  throwExistingLikeError,
+  throwLikeNotFoundError,
+} from "../utils/errors.js";
 
 const router = express.Router();
 
@@ -253,17 +257,28 @@ router.delete(
   })
 );
 
-// ! PUT y DELETE  likes en recomendaciones
+// ! POST y DELETE  likes en recomendaciones
 
-router.put(
+router.post(
   "/recommendations/:recommendationId/like",
+  loggedInGuard,
   wrapWithCatch(async (req, res) => {
     const { recommendationId } = req.params;
-    const userId = req.currentUser.id;
+    const currentUserId = req.currentUser.id;
 
+    const [[existingLike]] = await db.execute(
+      `SELECT * FROM recommendationLikes WHERE userId = ? AND recommendationId = ? LIMIT 1`,
+      [currentUserId, recommendationId]
+    );
+
+    if (existingLike) {
+      throwExistingLikeError();
+    }
+
+    // Insertar el nuevo like en la tabla
     await db.execute(
       `INSERT INTO recommendationLikes (userId, recommendationId) VALUES(?,?)`,
-      [userId, recommendationId]
+      [currentUserId, recommendationId]
     );
 
     sendOKCreated(res);
@@ -276,12 +291,16 @@ router.delete(
     const { recommendationId } = req.params;
     const userId = req.currentUser.id;
 
-    await db.execute(
+    const result = await db.execute(
       `DELETE FROM recommendationLikes WHERE userId = ? AND recommendationId = ?`,
       [userId, recommendationId]
     );
 
-    sendOK(res, { message: "Recommendation deleted successfully" });
+    if (result[0].affectedRows > 0) {
+      sendOK(res, { message: "Like deleted successfully" });
+    } else {
+      throwLikeNotFoundError();
+    }
   })
 );
 export default router;

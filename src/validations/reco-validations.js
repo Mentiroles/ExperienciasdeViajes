@@ -3,7 +3,6 @@ import {
   throwCategoryIsRequiredError,
   throwDescriptionIsRequiredError,
   throwImageIsRequiredError,
-  throwLocationIsRequiredError,
   throwRecommendationIdIsRequiredError,
   throwNotFoundError,
   throwUnauthorizedError,

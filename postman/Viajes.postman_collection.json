@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"eugenirrvi@gmail.com\",\r\n    \"password\": \"loremi2pss\",\r\n    \"nickName\": \"Euges\"\r\n}",
+							"raw": "{\r\n    \"email\": \"rezkvane@gmail.com\",\r\n    \"password\": \"angelpesadilla1\",\r\n    \"nickName\": \"pruebagafos\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -121,37 +121,21 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywibmlja05hbWUiOiJHQUZPIiwiaWF0IjoxNzAyNzU0NDcyLCJleHAiOjE3MDMzNTkyNzJ9.Nhdoygh48YrETTOUfUgi1Zsj5_HzY7BhQqPUc_AdVPY",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwibmlja05hbWUiOiJhbmdlbGl0byIsImlhdCI6MTcwNTA5MTE4OCwiZXhwIjoxNzA1Njk1OTg4fQ.IO9JZL7L80hzjI2klidSzIW4VW2Sh2R_3yaciAnOjew",
 								"type": "text"
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "nickname",
-									"value": "NewNickname",
-									"type": "text"
-								},
-								{
-									"key": "email",
-									"value": "newemail@example.com",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "newpassword",
-									"type": "text"
-								},
-								{
-									"key": "photo",
-									"type": "file",
-									"src": "/C:/Users/Vanessa/Pictures/Screenshots/Screenshot 2023-03-17 141811.png"
+							"mode": "raw",
+							"raw": "{\r\n      \"nickname\": \"gafo\",\r\n  \"email\": \"new_gafoexample.com\",\r\n  \"currentPassword\": \"angelpesao1\",\r\n  \"newPassword\": \"new_password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/3",
+							"raw": "http://localhost:3000/users/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -159,7 +143,7 @@
 							"port": "3000",
 							"path": [
 								"users",
-								"3"
+								"2"
 							]
 						}
 					},
@@ -416,16 +400,16 @@
 				{
 					"name": "Poner like",
 					"request": {
-						"method": "PUT",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywibmlja05hbWUiOiJHQUZPIiwiaWF0IjoxNzAyNzU0NDcyLCJleHAiOjE3MDMzNTkyNzJ9.Nhdoygh48YrETTOUfUgi1Zsj5_HzY7BhQqPUc_AdVPY",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmlja05hbWUiOiJwcnVlYmFnYWZvcyIsImlhdCI6MTcwNTQxNDE2OSwiZXhwIjoxNzA2MDE4OTY5fQ.lNfTYae8pHfgTZ2lTAmlnh162FAkcLQxFw4T7ZBCBWg",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/recommendations/2/like",
+							"raw": "http://localhost:3000/recommendations/1/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -433,7 +417,7 @@
 							"port": "3000",
 							"path": [
 								"recommendations",
-								"2",
+								"1",
 								"like"
 							]
 						}
@@ -462,6 +446,34 @@
 								"recommendations",
 								"1",
 								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Comentario",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmlja05hbWUiOiJhbmdlbGl0bzIiLCJpYXQiOjE3MDUzNDkzMzMsImV4cCI6MTcwNTk1NDEzM30.femdU9-4I5H6a8RT85pKXkhyRd4bBGEUegW0Yl7Lv6E",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/recommendations/1/comentarios/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"recommendations",
+								"1",
+								"comentarios",
+								"1"
 							]
 						}
 					},
