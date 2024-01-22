@@ -158,6 +158,8 @@ router.post(
 
     const userId = req.currentUser.id;
 
+    //? LA CATEGORIA DEBERA SELECCIONARSE, NO PUEDE PONER UNA NUEVA
+
     const [{ insertId }] = await db.execute(
       `INSERT INTO recommendations(title, category, locationId, userId, description,lean_in) VALUES(?,?,?,?,?,?)`,
       [title, category, locationId, userId, description, lean_in]

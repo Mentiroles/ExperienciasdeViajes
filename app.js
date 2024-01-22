@@ -5,8 +5,11 @@ import recommendationsRoutes from "./src/routes/recommendations.js";
 import commentsRoutes from "./src/routes/comments.js";
 import { PORT, PUBLIC_DIR, SERVER_HOST } from "./constants.js";
 import { throwNotFoundError } from "./src/utils/errors.js";
+import cors from "cors";
 
 const app = express();
+
+app.use(cors());
 
 const staticFileHandler = express.static(PUBLIC_DIR);
 app.use(staticFileHandler);
